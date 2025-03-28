@@ -1,0 +1,555 @@
+/* 全局样式 */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.wechat-container {
+    display: flex;
+    width: 1165px;
+    height: 900px;
+    border: 1px solid #ddd;
+    background-color: #f5f5f5;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 左侧菜单栏 */
+.menu-bar {
+    width: 56px;
+    background-color: #2e2e2e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    border-right: 1px solid #ddd;
+    position: relative;
+}
+
+.menu-item1 {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.menu-icon1 {
+    width: 36px;
+    height: auto;
+    position: relative;
+    margin-top: 16px;
+}
+
+.menu-icon2 {
+    width: 20.6px;
+    height: auto;
+    position: relative;
+    margin-top: 19px;
+    cursor: pointer;
+}
+
+.bottom-icon {
+    position: absolute;
+    bottom: 15.5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.sidebar-icon {
+    width: 18px;
+    height: auto;
+    cursor: pointer;
+}
+
+/* 左侧边栏 */
+.sidebar {
+    width: 225px;
+    background-color: #e4e4e4;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 搜索背景样式 */
+.search-bar {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 搜索栏样式 */
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: #e2e2e2;
+    border: 1px solid #e2e2e2;
+    border-radius: 5px;
+    padding: 5px 10px;
+    flex-grow: 1;
+    margin-right: 10px;
+    margin-left: -5px;
+    height: 15px;
+}
+
+.search-icon {
+    width: 13px;
+    height: 13px;
+    margin-right: 5px;
+    margin-left: -3px;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    font-size: 12px;
+    width: 100%;
+    background: none;
+}
+
+/* 加号按钮样式 */
+.add-button {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    font-weight: 100;
+    line-height: 18px;
+    text-align: center;
+    background-color: #e0e0e0;
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #ccc transparent; /* Firefox */
+}
+
+/* Webkit 浏览器（Chrome, Safari） */
+.chat-list::-webkit-scrollbar {
+    width: 6px; /* 滚动条宽度 */
+}
+
+.chat-list::-webkit-scrollbar-track {
+    background: transparent; /* 滚动条轨道背景 */
+}
+
+.chat-list::-webkit-scrollbar-thumb {
+    background: #ccc; /* 滚动条滑块颜色 */
+    border-radius: 3px; /* 滑块圆角 */
+}
+
+.chat-list::-webkit-scrollbar-thumb:hover {
+    background: #999; /* 滑块悬停颜色 */
+}
+
+.avatar1 {
+    width: 40px;
+    height: auto;
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    /*border-bottom: 1px solid #ddd;*/
+    cursor: pointer;
+    background-color: #e4e4e4!important; /* 聊天项背景颜色 */
+}
+
+.chat-item:hover {
+    background-color: #e0e0e0;
+}
+
+.chat-item.active {
+    background-color: #d8d8d8;
+}
+
+.avatar {
+    position: relative; /* 让消息提醒数相对于头像定位 */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message-count {
+    position: absolute; /* 绝对定位 */
+    top: -5px; /* 调整垂直位置 */
+    right: -5px; /* 调整水平位置 */
+    background-color: #fa5151; /* 红色背景 */
+    color: white; /* 白色字体 */
+    font-size: 10px; /* 字体大小 */
+    width: 15px; /* 宽度 */
+    height: 15px; /* 高度 */
+    border-radius: 50%; /* 圆形 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* 添加阴影 */
+}
+
+.chat-info {
+    flex-grow: 1;
+}
+
+.chat-name {
+    
+    margin-bottom: 18px;
+    font-size: 15px; /* 聊天名称字体大小 */
+    color: #333; /* 聊天名称字体颜色 */
+    white-space: nowrap;      /* 禁止换行 */
+    overflow: hidden;         /* 隐藏溢出 */
+    text-overflow: ellipsis;  /* 显示省略号 */
+    max-width: 110px;         /* 限制宽度 */
+}
+
+.chat-time {
+    font-size: 14px;
+    margin-bottom: 18px;
+    color: #999;
+    margin-left: auto; /* 时间靠右对齐 */
+}
+
+/* 右侧聊天窗口 /**/
+.chat-window {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5ff;
+}
+
+/* 聊天窗口头部 */
+.chat-header {
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+    /*font-weight: bold;*/
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 16px;
+    position: relative;
+}
+
+.icon-container {
+    display: flex;
+    position: absolute;
+    top: 15px;
+    right: 12px;
+    transform: translateY(-50%);
+}
+
+.header-icon {
+    width: 109px;
+    height: auto;
+    cursor: pointer;
+}
+
+/* 消息容器 */
+.messages {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 消息包装器 */
+.message-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+/* 收到的消息（左侧） */
+.message-wrapper.received {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+/* 收到消息左侧的图标 */
+.message-icon-left {
+    width: 36px;
+    height: auto;
+}
+
+/* 发送的消息（右侧图标） */
+.message-wrapper.sent {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+/* 发送消息右侧的图标 */
+.message-icon-right {
+    order: 2;
+    width: 36px;
+    height: auto;
+}
+
+.message.sent {
+    order: 1;
+}
+
+/* Webkit 浏览器（Chrome, Safari） */
+.messages::-webkit-scrollbar {
+    width: 7px; /* 滚动条宽度 */
+}
+
+.messages::-webkit-scrollbar-track {
+    background: transparent; /* 滚动条轨道背景 */
+}
+
+.messages::-webkit-scrollbar-thumb {
+    background: #d5d5d5; /* 滚动条滑块颜色 */
+    border-radius: 3px; /* 滑块圆角 */
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+    background: #999; /* 滑块悬停颜色 */
+}
+
+/* 添加以下新样式 */
+.chat-item.active {
+    background-color: #d8d8d8 !important; /* 选中状态颜色 */
+}
+  
+/* 消息框样式 */
+.message-box {
+    max-width: 70%;
+    min-width: 120px; /* 最小宽度 */
+    width: calc(120px + 4vw * var(--random-factor)); /* 随机宽度计算 */
+    padding: 10px; /* 调整内边距 */
+    border-radius: 5px;
+    font-size: 14px;
+    word-wrap: break-word;
+    line-height: 1.5;
+    background-color: #f0f0f0;
+    position: relative;
+}
+
+/* 收到的消息框（白色） */
+.message-wrapper.received .message-box {
+    padding: 18px 50px;
+    background-color: #ffffff;
+    color: #000;
+}
+
+/* 发送的消息框（绿色） */
+.message-wrapper.sent .message-box {
+    padding: 18px 60px;
+    background-color: #95ec69;
+    color: #000;
+}
+
+/* 消息框小箭头 */
+.message-wrapper.received .message-box::before {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: 9px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid white;
+}
+
+.message-wrapper.sent .message-box::before {
+    content: "";
+    position: absolute;
+    right: -7px;
+    top: 9px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid #95ec69;
+}
+
+/* 时间戳样式 */
+.message-time {
+    font-size: 13px;
+    color: rgb(255, 255, 255); /* 时间戳文字颜色改为白色 */
+    text-align: center;
+    margin-top: 5px;
+    padding: 1px 3px; /* 增加内边距 */
+    background-color: #dcdcdc; /* 时间戳背景颜色 */
+    border-radius: 1px; /* 圆角 */
+    display: inline-block; /* 让背景色只包裹文字 */
+    margin: 10px auto; /* 居中显示 */
+}
+
+/* 输入区域 */
+.input-bar {
+    padding: 250px 10px 10px 10px;
+    background-color: #f8f8f8;
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid #ddd;
+    position: relative;
+}
+
+/* 图标容器 */
+.input-icons {
+    position: absolute;
+    top: 15px;
+    left: 30px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* 图标样式 */
+.input-icon {
+    height: 18px;
+    width: auto;
+    cursor: pointer;
+}
+
+/* 图标容器 */
+.input-icons1 {
+    position: absolute;
+    top: 15px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* 图标样式 */
+.input-icon1 {
+    height: 18px;
+    width: auto;
+    cursor: pointer;
+}
+
+/* 发送按钮 */
+.input-bar button {
+    padding: 7px 23px;
+    border: none;
+    background-color: #e9e9e9;
+    color: #07c160;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+}
+
+
+        /* 新增气泡样式 */
+        #bubble-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+.wechat-container {
+    z-index: 9999; /* 确保聊天界面在气泡上方 */
+    position: relative;
+}
+
+/* 测试按钮样式 */
+.test-controls {
+    position: fixed;
+    top: 10px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10000;
+}
+
+.test-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.test-buttons button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+}
+
+.test-buttons button:hover {
+    background-color: #e0e0e0;
+}
+
+.test-buttons button:active {
+    background-color: #d0d0d0;
+}
+
+        /* 创建新的层叠上下文 */
+
+        /* 气泡样式 */
+        .bubble {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #fa3e3e;
+            /*#fa5151;  红色背景 */
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 998; /* 提高气泡层级 */
+            transition: all 0.3s ease-out;
+        }
+
+        /* 测试按钮容器 */
+        .test-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+        }
+
+        /* 图片样式 */
+        .corner-logo {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            width: 100px;
+            height: auto;
+            /*z-index: 998!important ;  图片在底层 */
+            cursor: pointer;
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1));
+        }
+
+        /* 气泡容器 */
+        #bubble-container {
+            position: fixed;
+            bottom: 10px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            z-index: 998; /* 气泡在中间层 */
+            pointer-events: none;
+        }

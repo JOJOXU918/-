@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信网页版</title>
+    <link rel="stylesheet" href="stylecopy.css">
+    <!-- 添加音频元素（支持 m4a 和 mp3） -->
+    <audio id="notification-sound">
+        <source src="assets/sounds/notification.m4a" type="audio/mp4">
+        <source src="assets/sounds/notification.mp3" type="audio/mpeg">
+        您的浏览器不支持音频播放。
+    </audio>
+</head>
+<body>
+    <!-- 气泡容器 -->
+    <div id="bubble-container"></div>
+
+    <!-- 图片 -->
+    <img src="assets/icons/assHD.png" alt="左上角图标" class="corner-logo">
+
+    <div class="wechat-container">
+        <!-- 左侧菜单栏 -->
+        <div class="menu-bar">
+            <div class="menu-item1">
+                <img src="assets/icons/avatar.png" alt="Menu Icon 1" class="menu-icon1">
+            </div>
+            <div class="menu-item2">
+                <img src="assets/icons/lefttop.png" alt="Menu Icon 2" class="menu-icon2">
+            </div>
+            <div class="bottom-icon">
+                <img src="assets/icons/leftbottom.png" alt="New Icon" class="sidebar-icon">
+            </div>
+        </div>
+
+        <!-- 左侧聊天列表 -->
+        <div class="sidebar">
+            <div class="search-bar">
+                <div class="search-container">
+                    <img src="assets/icons/icontest2.png" alt="Search Icon" class="search-icon">
+                    <input type="text" placeholder="搜索" class="search-input">
+                </div>
+                <button class="add-button">+</button>
+            </div>
+            <div class="chat-list" id="chat-list">
+                <!-- 聊天列表会动态更新 -->
+            </div>
+        </div>
+
+        <!-- 右侧聊天窗口 -->
+        <div class="chat-window">
+            <div class="chat-header">
+                <div id="chat-header-name">文件传输助手</div>
+                <div class="icon-container">
+                    <img src="assets/icons/righttop.png" alt="Icon 1" class="header-icon">
+                </div>
+            </div>
+            <div class="messages" id="messages">
+                <!-- 消息会动态插入到这里 -->
+            </div>
+            <div class="input-bar">
+                <div class="input-icons">
+                    <img src="assets/icons/information.png" alt="Icon 1" class="input-icon">
+                </div>
+                <div class="input-icons1">
+                    <img src="assets/icons/rightinformation.png" alt="Icon 1" class="input-icon1">
+                </div>
+                <button onclick="sendMessage()">发送(S)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================== 气泡生成逻辑 ==================
+        let bubbles = JSON.parse(localStorage.getItem('bubbles') || '[]');
+
+        // 初始化气泡
+        function initBubbles() {
+            bubbles.forEach(bubble => {
+                createBubble(bubble.x, bubble.y, bubble.vx, bubble.vy);
+            });
+        }
+
+        // 获取图片顶部中心坐标
+        function getImageCenter() {
+            const logo = document.querySelector('.corner-logo');
+            const rect = logo.getBoundingClientRect();
+            return {
+                x: rect.left + 31,
+                y: rect.top + 13 // 在图片正上方生成气泡
+            };
+        }
+
+        // 创建气泡函数
+        function createBubble(x, y, vx, vy) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            document.getElementById('bubble-container').appendChild(bubble);
+
+            // 初始大小2x2px
+            bubble.style.width = '2px';
+            bubble.style.height = '2px';
+            bubble.style.transform = 'translate(-1px, -1px)';
+
+            // 气泡从小变大的动画
+            let size = 2;
+            const growAnimation = setInterval(() => {
+                size += 1;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.transform = `translate(-${size/2}px, -${size/2}px)`;
+                if (size >= 20) {
+                    clearInterval(growAnimation);
+                }
+            }, 16); // 约60fps
+
+            // 初始化位置
+            bubble.style.left = x + 'px';
+            bubble.style.top = y + 'px';
+
+            // 动画逻辑
+            function animate() {
+                const rect = bubble.getBoundingClientRect();
+                x += vx;
+                y += vy;
+
+                // 边界检测
+                const maxX = document.documentElement.clientWidth - 20;
+                const maxY = document.documentElement.clientHeight - 20;
+
+                if (x <= 0) { x = 0; vx = -vx; }
+                if (x >= maxX) { x = maxX; vx = -vx; }
+                if (y <= 0) { y = 0; vy = -vy; }
+                if (y >= maxY) { y = maxY; vy = -vy; }
+
+                bubble.style.left = x + 'px';
+                bubble.style.top = y + 'px';
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+            return { x, y, vx, vy };
+        }
+
+        // 测试用 - 添加气泡
+        function addTestBubble() {
+            const center = getImageCenter();
+            createBubble(
+                center.x,
+                center.y,
+                (Math.random() * 3 + 1) * (Math.random() > 0.5 ? 1 : -1),
+                (Math.random() * 3 + 1) * (Math.random() > 0.5 ? 1 : -1)
+            );
+        }
+
+        // 测试用 - 清除所有气泡
+        function clearBubbles() {
+            document.querySelectorAll('.bubble').forEach(bubble => bubble.remove());
+            bubbles = [];
+            localStorage.removeItem('bubbles');
+        }
+
+        // 初始化现有气泡
+        window.addEventListener('load', () => {
+            initBubbles();
+            
+            // 添加键盘事件监听
+            document.addEventListener('keydown', (e) => {
+                if (e.key === '8') {
+                    addTestBubble();
+                } else if (e.key === '5') {
+                    clearBubbles();
+                }
+            });
+        });
+
+        // 窗口大小变化处理
+        window.addEventListener('resize', () => {
+            localStorage.setItem('bubbles', JSON.stringify(bubbles));
+        });
+
+        // ================== WebSocket 消息监听 ==================
+        const websocket = new WebSocket("ws://localhost:1234");
+        let chats = JSON.parse(localStorage.getItem("chats")) || {};
+
+        // 获取 DOM 元素
+        const chatList = document.getElementById("chat-list");
+        const messagesDiv = document.getElementById("messages");
+        const chatHeaderName = document.getElementById("chat-header-name");
+
+        // 获取音频元素
+        const notificationSound = document.getElementById("notification-sound");
+
+        // 播放提示音的函数
+        function playNotificationSound() {
+            notificationSound.play().catch(error => {
+                console.error("提示音播放失败：", error);
+            });
+        }
+
+        // 初始化 UI
+        function initUI() {
+            // 加载聊天列表
+            for (const sender in chats) {
+                const chat = chats[sender];
+                addChatItem(sender, chat.lastTime, chat.messageCount);
+            }
+
+            // 加载默认聊天窗口
+            if (Object.keys(chats).length > 0) {
+                const firstChat = Object.keys(chats)[0];
+                updateChatWindow(firstChat);
+            }
+
+            // 绑定聊天项点击事件
+            document.querySelectorAll('.chat-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    // 移除所有激活状态
+                    document.querySelectorAll('.chat-item').forEach(el => el.classList.remove('active'));
+                    // 添加当前激活状态
+                    item.classList.add('active');
+                    // 更新右侧聊天窗口
+                    const sender = item.getAttribute('data-chat');
+                    updateChatWindow(sender);
+                });
+            });
+        }
+
+        // 添加新的聊天列表项
+        function addChatItem(sender, time, messageCount = 1) {
+            const chatItem = document.createElement("div");
+            chatItem.className = "chat-item";
+            chatItem.setAttribute("data-chat", sender);
+            chatItem.innerHTML = `
+                <div class="avatar">
+                    <img src="assets/icons/avatar.png" alt="Avatar" class="avatar1">
+                    <div class="message-count">${messageCount}</div>
+                </div>
+                <div class="chat-info">
+                    <div class="chat-name">${sender}</div>
+                </div>
+                <div class="chat-time">${time}</div>
+            `;
+            chatList.appendChild(chatItem);
+        }
+
+        // 更新聊天列表项
+        function updateChatItem(sender, time, messageCount) {
+            const chatItem = chatList.querySelector(`[data-chat="${sender}"]`);
+            if (chatItem) {
+                chatItem.querySelector(".chat-time").textContent = time;
+                const countElement = chatItem.querySelector(".message-count");
+                countElement.textContent = parseInt(countElement.textContent) + 1;
+            }
+        }
+
+        // 更新右侧聊天窗口
+        function updateChatWindow(sender) {
+            const chat = chats[sender];
+            if (!chat) return;
+
+            // 更新聊天名称
+            chatHeaderName.textContent = sender;
+
+            // 清空消息区域
+            messagesDiv.innerHTML = "";
+
+            // 添加消息记录
+            chat.messages.forEach((message) => {
+                addMessageToChatWindow(sender, message.time);
+            });
+
+            // 左侧聊天项背景加深并移动到最上方
+            const chatItem = chatList.querySelector(`[data-chat="${sender}"]`);
+            if (chatItem) {
+                // 移除所有激活状态
+                document.querySelectorAll('.chat-item').forEach(el => el.classList.remove('active'));
+                // 添加当前激活状态
+                chatItem.classList.add('active');
+                // 移动到最上方
+                chatList.prepend(chatItem);
+            }
+        }
+
+        // 添加消息到聊天窗口
+        function addMessageToChatWindow(sender, time) {
+            // 生成随机消息数量（1~3条）
+            const messageCount = Math.floor(Math.random() * 3) + 1;
+
+            // 时间戳
+            const messageTime = document.createElement("div");
+            messageTime.className = "message-time";
+            messageTime.textContent = time;
+            messagesDiv.appendChild(messageTime);
+
+            // 随机生成消息框（绿/白随机）
+            for (let i = 0; i < messageCount; i++) {
+                const isSent = Math.random() > 0.5;
+                const randomFactor = Math.random();
+
+                const messageWrapper = document.createElement("div");
+                messageWrapper.className = `message-wrapper ${isSent ? 'sent' : 'received'}`;
+                messageWrapper.innerHTML = isSent ?
+                    `<div class="message-box" style="--random-factor: ${randomFactor}"></div>
+                     <img src="assets/icons/avatar.png" alt="Avatar" class="message-icon-right">` :
+                    `<img src="assets/icons/avatar.png" alt="Avatar" class="message-icon-left">
+                     <div class="message-box" style="--random-factor: ${randomFactor}"></div>`;
+
+                messagesDiv.appendChild(messageWrapper);
+            }
+
+            // 滚动到底部
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // 监听 WebSocket 消息
+        websocket.addEventListener("message", (event) => {
+            const data = JSON.parse(event.data);
+            const { sender, content, time } = data;
+
+            // 更新聊天列表
+            if (!chats[sender]) {
+                chats[sender] = {
+                    name: sender,
+                    lastTime: time,
+                    messageCount: 1,
+                    messages: [{ time }]
+                };
+                addChatItem(sender, time, 1);
+            } else {
+                chats[sender].lastTime = time;
+                chats[sender].messageCount += 1;
+                chats[sender].messages.push({ time });
+                updateChatItem(sender, time, chats[sender].messageCount);
+            }
+
+            // 更新右侧聊天窗口
+            updateChatWindow(sender);
+
+            // 播放提示音
+            playNotificationSound();
+
+            // 保存数据到 localStorage
+            localStorage.setItem("chats", JSON.stringify(chats));
+
+            // 生成一个气泡
+            const center = getImageCenter();
+            const newBubble = createBubble(
+                center.x,
+                center.y,
+                (Math.random() * 3 + 1) * (Math.random() > 0.5 ? 1 : -1),
+                (Math.random() * 3 + 1) * (Math.random() > 0.5 ? 1 : -1)
+            );
+            bubbles.push(newBubble);
+            localStorage.setItem('bubbles', JSON.stringify(bubbles));
+        });
+
+        // 初始化UI
+        initUI();
+    </script>
+</body>
+</html>
